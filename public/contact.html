@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Emil Shipping</title>
+    <meta name="description" content="Get in touch with Emil Shipping. Contact our team for freight forwarding services, quotes, and customer support. Available 24/7.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+    
+    <style>
+        .contact-hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+        
+        .contact-info {
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+        }
+        
+        .contact-form-container {
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-icon {
+            width: 3rem;
+            height: 3rem;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+        
+        .contact-details h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        
+        .contact-details p {
+            color: #6b7280;
+            margin: 0;
+        }
+        
+        .contact-details a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .contact-details a:hover {
+            text-decoration: underline;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .form-submit {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .form-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .form-submit:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success-message,
+        .error-message {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .map-container {
+            margin-top: 4rem;
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .map-header {
+            padding: 2rem;
+            background: var(--bg-light);
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .map-embed {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+        
+        .office-hours {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .hours-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hours-item:last-child {
+            border-bottom: none;
+        }
+        
+        .emergency-contact {
+            background: var(--accent-color);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .emergency-contact h3 {
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        
+        .emergency-contact .btn {
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-top: 2rem;
+            }
+            
+            .contact-info,
+            .contact-form-container {
+                padding: 2rem;
+            }
+            
+            .contact-item {
+                padding: 1rem;
+            }
+            
+            .map-header {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="/" class="logo">
+                <i class="fas fa-plane"></i> Emil Shipping
+            </a>
+            
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/services" class="nav-link">Services</a></li>
+                <li><a href="/gallery" class="nav-link">Gallery</a></li>
+                <li><a href="/#tracking" class="nav-link">Track Package</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="signin.html" class="nav-link">Sign In</a></li>
+            </ul>
+            
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main style="margin-top: 80px;">
+        <!-- Hero Section -->
+        <section class="contact-hero">
+            <div class="container">
+                <h1 style="color: var(--white); font-size: 3rem; margin-bottom: 1rem;">Contact Us</h1>
+                <p style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto;">
+                    Get in touch with our team for freight forwarding services, quotes, and customer support. We're here to help 24/7.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Content -->
+        <section class="section">
+            <div class="container">
+                <div class="contact-content">
+                    <!-- Contact Information -->
+                    <div>
+                        <div class="contact-info">
+                            <h2 style="color: var(--text-dark); margin-bottom: 2rem;">
+                                <i class="fas fa-info-circle" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
+                                Get in Touch
+                            </h2>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h4>Our Location</h4>
+                                    <p>123 Shipping Lane<br>Port City, PC 12345<br>United States</p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h4>Phone Numbers</h4>
+                                    <p>Main: <a href="tel:+15551234567">+1 (555) 123-4567</a><br>
+                                    Emergency: <a href="tel:+15551234568">+1 (555) 123-4568</a></p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h4>Email Addresses</h4>
+                                    <p>General: <a href="mailto:info@emilshipping.com">info@emilshipping.com</a><br>
+                                    Support: <a href="mailto:support@emilshipping.com">support@emilshipping.com</a></p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h4>Business Hours</h4>
+                                    <p>24/7 Customer Support<br>Operations: Mon-Fri 8AM-6PM EST</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Office Hours -->
+                        <div class="office-hours">
+                            <h3 style="color: var(--white); margin-bottom: 1rem;">
+                                <i class="fas fa-business-time" style="margin-right: 0.5rem;"></i>
+                                Office Hours
+                            </h3>
+                            <div class="hours-grid">
+                                <div>
+                                    <div class="hours-item">
+                                        <span>Monday - Friday</span>
+                                        <span>8:00 AM - 6:00 PM</span>
+                                    </div>
+                                    <div class="hours-item">
+                                        <span>Saturday</span>
+                                        <span>9:00 AM - 4:00 PM</span>
+                                    </div>
+                                    <div class="hours-item">
+                                        <span>Sunday</span>
+                                        <span>Emergency Only</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="margin-top: 1rem; opacity: 0.9; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                                Customer support and tracking services are available 24/7 online and via phone.
+                            </p>
+                        </div>
+                        
+                        <!-- Emergency Contact -->
+                        <div class="emergency-contact">
+                            <h3>Emergency Support</h3>
+                            <p style="margin-bottom: 1rem;">Need immediate assistance with your shipment? Our emergency support team is available 24/7.</p>
+                            <a href="tel:+15551234568" class="btn btn-secondary">
+                                <i class="fas fa-phone" style="margin-right: 0.5rem;"></i>
+                                Call Emergency Line
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Form -->
+                    <div class="contact-form-container">
+                        <h2 style="color: var(--text-dark); margin-bottom: 2rem;">
+                            <i class="fas fa-paper-plane" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
+                            Send us a Message
+                        </h2>
+                        
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" id="name" name="name" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input type="email" id="email" name="email" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="form-input">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject" class="form-label">Subject *</label>
+                                <select id="subject" name="subject" class="form-input" required>
+                                    <option value="">Select a subject</option>
+                                    <option value="quote">Request Quote</option>
+                                    <option value="tracking">Tracking Inquiry</option>
+                                    <option value="support">Customer Support</option>
+                                    <option value="complaint">File Complaint</option>
+                                    <option value="partnership">Partnership Inquiry</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message" class="form-label">Message *</label>
+                                <textarea id="message" name="message" class="form-textarea" placeholder="Please provide details about your inquiry..." required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="form-submit" id="submitBtn">
+                                <span class="loading-spinner" id="loadingSpinner"></span>
+                                <i class="fas fa-paper-plane" id="submitIcon"></i>
+                                <span id="submitText">Send Message</span>
+                            </button>
+                        </form>
+                        
+                        <div class="success-message" id="successMessage">
+                            <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                            Thank you for your message! We'll get back to you within 24 hours.
+                        </div>
+                        
+                        <div class="error-message" id="errorMessage">
+                            <i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>
+                            <span id="errorText">There was an error sending your message. Please try again.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="section">
+            <div class="container">
+                <div class="map-container">
+                    <div class="map-header">
+                        <h3 style="color: var(--text-dark); margin-bottom: 0.5rem;">
+                            <i class="fas fa-map" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
+                            Find Our Location
+                        </h3>
+                        <p style="color: #6b7280;">Visit our headquarters for in-person consultations and support</p>
+                    </div>
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.1234567890123!2d-74.0059413!3d40.7127753!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQ2LjAiTiA3NMKwMDAnMjEuNCJX!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                        class="map-embed"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section" style="background: var(--bg-light);">
+            <div class="container">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="grid grid-2">
+                    <div>
+                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">How can I track my package?</h4>
+                        <p style="margin-bottom: 2rem;">Use our online tracking system with your tracking ID (format: ESP-XXXXXXXXXXXX) or call our customer service line for assistance.</p>
+                        
+                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">What are your shipping rates?</h4>
+                        <p style="margin-bottom: 2rem;">Shipping rates depend on destination, weight, dimensions, and service type. Contact us for a personalized quote.</p>
+                        
+                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">Do you offer insurance?</h4>
+                        <p>Yes, we offer comprehensive cargo insurance to protect your shipments. Insurance rates vary based on cargo value and destination.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">What documents do I need?</h4>
+                        <p style="margin-bottom: 2rem;">Required documents vary by destination but typically include commercial invoice, packing list, and export/import permits.</p>
+                        
+                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">How long does shipping take?</h4>
+                        <p style="margin-bottom: 2rem;">Transit times vary by service type and destination. Air freight: 1-5 days, Ocean freight: 15-45 days, Ground: 1-10 days.</p>
+                        
+                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">Do you handle customs clearance?</h4>
+                        <p>Yes, our experienced customs team handles all clearance procedures to ensure smooth delivery of your shipments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section" style="background: var(--primary-color); color: var(--white); text-align: center;">
+            <div class="container">
+                <h2 style="color: var(--white); margin-bottom: 1rem;">Ready to Ship with Emil?</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
+                    Join thousands of satisfied customers who trust Emil Shipping for their freight forwarding needs.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="/#tracking" class="btn btn-accent">Track Package</a>
+                    <a href="/services" class="btn btn-secondary">Our Services</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-plane"></i> Emil Shipping</h3>
+                    <p>Your trusted partner for global freight forwarding and logistics solutions. Delivering excellence since 2000.</p>
+                    <div style="margin-top: 1rem;">
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" style="font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="/">Home</a></p>
+                    <p><a href="/services">Services</a></p>
+                    <p><a href="/gallery">Gallery</a></p>
+                    <p><a href="/#tracking">Track Package</a></p>
+                    <p><a href="/contact">Contact Us</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <p><a href="/services#air-freight">Air Freight</a></p>
+                    <p><a href="/services#ocean-freight">Ocean Freight</a></p>
+                    <p><a href="/services#ground-transport">Ground Transport</a></p>
+                    <p><a href="/services#warehousing">Warehousing</a></p>
+                    <p><a href="/services#customs">Customs Clearance</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Shipping Lane, Port City, PC 12345</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@emilshipping.com</p>
+                    <p><i class="fas fa-clock"></i> 24/7 Customer Support</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Emil Shipping. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/main.js"></script>
+    <script>
+        // Contact form functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const submitIcon = document.getElementById('submitIcon');
+            const submitText = document.getElementById('submitText');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const formData = new FormData(contactForm);
+                const data = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    subject: formData.get('subject'),
+                    message: formData.get('message')
+                };
+
+                // Validate required fields
+                if (!data.name || !data.email || !data.subject || !data.message) {
+                    showError('Please fill in all required fields.');
+                    return;
+                }
+
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(data.email)) {
+                    showError('Please enter a valid email address.');
+                    return;
+                }
+
+                // Show loading state
+                setLoadingState(true);
+                hideMessages();
+
+                try {
+                    // Use real API endpoint
+                    const response = await fetch('/api/contact', { 
+                        method: 'POST', 
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data) 
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok && result.success) {
+                        showSuccess();
+                        contactForm.reset();
+                    } else {
+                        showError(result.message || 'There was an error sending your message. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Contact form error:', error);
+                    showError('There was an error sending your message. Please try again or contact us directly.');
+                } finally {
+                    setLoadingState(false);
+                }
+            });
+
+            function setLoadingState(loading) {
+                if (loading) {
+                    loadingSpinner.style.display = 'block';
+                    submitIcon.style.display = 'none';
+                    submitText.textContent = 'Sending...';
+                    submitBtn.disabled = true;
+                } else {
+                    loadingSpinner.style.display = 'none';
+                    submitIcon.style.display = 'block';
+                    submitText.textContent = 'Send Message';
+                    submitBtn.disabled = false;
+                }
+            }
+
+            function showSuccess() {
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            }
+
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+            }
+
+            function hideMessages() {
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+            }
+
+            // Auto-hide messages after 5 seconds
+            function autoHideMessage(element) {
+                setTimeout(() => {
+                    element.style.display = 'none';
+                }, 5000);
+            }
+
+            // Watch for message display changes
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        if (mutation.target.style.display === 'block') {
+                            autoHideMessage(mutation.target);
+                        }
+                    }
+                });
+            });
+
+            observer.observe(successMessage, { attributes: true });
+            observer.observe(errorMessage, { attributes: true });
+        });
+    </script>
+</body>
+</html>

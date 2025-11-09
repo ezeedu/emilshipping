@@ -1,0 +1,64 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shipGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E5C8A;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#skyGradient)"/>
+  
+  <!-- Ocean -->
+  <rect x="0" y="400" width="800" height="200" fill="#1E6091"/>
+  
+  <!-- Waves -->
+  <path d="M0,420 Q200,400 400,420 T800,420 L800,600 L0,600 Z" fill="#2E7DB8"/>
+  <path d="M0,440 Q150,425 300,440 T600,440 T800,440 L800,600 L0,600 Z" fill="#3A8BC8"/>
+  
+  <!-- Container Ship -->
+  <g transform="translate(150,300)">
+    <!-- Ship Hull -->
+    <path d="M0,80 L400,80 L420,100 L-20,100 Z" fill="url(#shipGradient)"/>
+    <rect x="0" y="40" width="400" height="40" fill="#5A9BD4"/>
+    
+    <!-- Containers -->
+    <rect x="50" y="10" width="40" height="30" fill="#FF6B6B" stroke="#D63031" stroke-width="2"/>
+    <rect x="100" y="10" width="40" height="30" fill="#4ECDC4" stroke="#00B894" stroke-width="2"/>
+    <rect x="150" y="10" width="40" height="30" fill="#45B7D1" stroke="#0984E3" stroke-width="2"/>
+    <rect x="200" y="10" width="40" height="30" fill="#96CEB4" stroke="#00B894" stroke-width="2"/>
+    <rect x="250" y="10" width="40" height="30" fill="#FFEAA7" stroke="#FDCB6E" stroke-width="2"/>
+    <rect x="300" y="10" width="40" height="30" fill="#DDA0DD" stroke="#A29BFE" stroke-width="2"/>
+    
+    <!-- Ship Details -->
+    <circle cx="350" cy="60" r="8" fill="#2D3436"/>
+    <rect x="340" y="45" width="20" height="10" fill="#636E72"/>
+  </g>
+  
+  <!-- Airplane -->
+  <g transform="translate(500,100)">
+    <ellipse cx="0" cy="0" rx="60" ry="8" fill="#74B9FF"/>
+    <ellipse cx="-20" cy="-2" rx="25" ry="4" fill="#0984E3"/>
+    <ellipse cx="20" cy="-2" rx="25" ry="4" fill="#0984E3"/>
+    <circle cx="40" cy="0" r="3" fill="#2D3436"/>
+  </g>
+  
+  <!-- Clouds -->
+  <g fill="#FFFFFF" opacity="0.8">
+    <circle cx="100" cy="80" r="20"/>
+    <circle cx="120" cy="80" r="25"/>
+    <circle cx="140" cy="80" r="20"/>
+    
+    <circle cx="600" cy="120" r="15"/>
+    <circle cx="615" cy="120" r="20"/>
+    <circle cx="630" cy="120" r="15"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="400" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2D3436">Emil Shipping</text>
+  <text x="400" y="575" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#636E72">Global Freight Solutions</text>
+</svg>

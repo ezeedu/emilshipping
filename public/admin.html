@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Emil Shipping</title>
+    <meta name="description" content="Emil Shipping admin dashboard for managing packages and shipments.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+    
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- PDF Generation Libraries -->
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+    
+    <style>
+        .admin-container {
+            min-height: 100vh;
+            background: #f8fafc;
+        }
+        
+        .admin-header {
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .admin-nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .admin-nav a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .admin-nav a:hover {
+            color: var(--primary-color);
+        }
+        
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+        
+        .user-role {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        
+        .logout-btn {
+            background: #ef4444;
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+        
+        /* Hamburger Menu Toggle */
+        .admin-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            transition: background 0.3s ease;
+        }
+        
+        .admin-nav-toggle:hover {
+            background: #f1f5f9;
+        }
+        
+        /* Mobile user info (hidden by default) */
+        .admin-user-mobile {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 1rem;
+        }
+        
+        .admin-main {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .admin-tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-title {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .stat-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--white);
+        }
+        
+        .stat-icon.packages { background: #3b82f6; }
+        .stat-icon.delivered { background: #10b981; }
+        .stat-icon.transit { background: #f59e0b; }
+        .stat-icon.pending { background: #ef4444; }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        
+        .admin-card {
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .admin-card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .admin-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-card-subtitle {
+            color: #64748b;
+        }
+        
+        .admin-card-body {
+            padding: 1.5rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .form-section-title i {
+            color: var(--primary-color);
+        }
+        
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+        
+        .packages-table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 1rem;
+        }
+        
+        .packages-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .packages-table th,
+        .packages-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .packages-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .tracking-id {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-badge.delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-badge.transit {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-badge.pending {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: var(--white);
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            color: var(--white);
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: var(--white);
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: var(--white);
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background: var(--white);
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .alert.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -0.5rem;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid var(--white);
+            box-shadow: 0 0 0 3px #e2e8f0;
+        }
+        
+        .timeline-item.delivered::before {
+            background: #10b981;
+        }
+        
+        .timeline-content {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .timeline-status {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-location {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-time {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-note {
+            color: #4b5563;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .admin-header {
+                padding: 1rem;
+            }
+            
+            .admin-main {
+                padding: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 1rem;
+            }
+            
+            .admin-nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border-top: 1px solid #e2e8f0;
+            }
+            
+            .admin-nav.active {
+                display: flex;
+            }
+            
+            .admin-nav-link {
+                padding: 0.75rem 0;
+                border-bottom: 1px solid #f1f5f9;
+                display: block;
+            }
+            
+            .admin-nav-link:last-of-type {
+                border-bottom: none;
+            }
+            
+            .admin-nav-toggle {
+                display: block;
+            }
+            
+            .admin-user {
+                display: none;
+            }
+            
+            .admin-user-mobile {
+                display: flex;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .admin-user-mobile .user-info {
+                text-align: center;
+            }
+            
+            .logout-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .admin-main {
+                padding: 1rem;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .admin-tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .admin-tab {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .packages-table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .packages-table {
+                font-size: 0.8rem;
+                min-width: 600px;
+            }
+            
+            .packages-table th,
+            .packages-table td {
+                padding: 0.5rem 0.25rem;
+                white-space: nowrap;
+            }
+            
+            .admin-card {
+                margin: 0;
+                border-radius: 0.5rem;
+            }
+            
+            .admin-card-body {
+                padding: 1rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .admin-header {
+                padding: 0.75rem;
+            }
+            
+            .admin-logo {
+                font-size: 1.25rem;
+            }
+            
+            .admin-main {
+                padding: 0.75rem;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 1.25rem;
+            }
+            
+            .dashboard-header p {
+                font-size: 0.9rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .admin-card-header {
+                padding: 1rem;
+            }
+            
+            .admin-card-title {
+                font-size: 1.25rem;
+            }
+            
+            .admin-card-subtitle {
+                font-size: 0.85rem;
+            }
+            
+            .form-input,
+            .form-select {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .packages-table {
+                font-size: 0.75rem;
+            }
+            
+            .tracking-id {
+                font-size: 0.7rem;
+            }
+            
+            .status-badge {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.5rem;
+            }
+            
+            .modal-content {
+                width: 98%;
+                margin: 1% auto;
+                padding: 1rem;
+            }
+            
+            .modal-header h3 {
+                font-size: 1.1rem;
+            }
+            
+            .timeline-item {
+                padding: 0.75rem;
+            }
+            
+            .timeline-location {
+                font-size: 0.9rem;
+            }
+            
+            .timeline-time {
+                font-size: 0.75rem;
+            }
+            
+            .timeline-note {
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .admin-tab,
+            .btn,
+            .logout-btn {
+                min-height: 44px; /* iOS recommended touch target */
+            }
+            
+            .packages-table td button {
+                min-height: 36px;
+                min-width: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Header -->
+        <header class="admin-header">
+            <div class="admin-logo">
+                <i class="fas fa-plane"></i>
+                Emil Shipping Admin
+            </div>
+            
+            <nav class="admin-nav">
+                <a href="/" class="admin-nav-link">View Website</a>
+                <a href="/#tracking" class="admin-nav-link">Track Package</a>
+                <div class="admin-user-mobile">
+                    <div class="user-info">
+                        <div class="user-name">Admin User</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </nav>
+            
+            <div class="admin-user">
+                <div class="user-info">
+                    <div class="user-name">Admin User</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+            
+            <button class="admin-nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Dashboard</h1>
+                <p class="dashboard-subtitle">Manage your shipments and track performance</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Total Packages</div>
+                        <div class="stat-icon packages">
+                            <i class="fas fa-box"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="totalPackages">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Delivered</div>
+                        <div class="stat-icon delivered">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="deliveredPackages">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">In Transit</div>
+                        <div class="stat-icon transit">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="transitPackages">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">Pending</div>
+                        <div class="stat-icon pending">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="pendingPackages">0</div>
+                </div>
+            </div>
+
+            <!-- Admin Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchTab('create', event)">
+                    <i class="fas fa-plus"></i>
+                    Create Package
+                </button>
+                <button class="admin-tab" onclick="switchTab('manage', event)">
+                    <i class="fas fa-boxes"></i>
+                    Manage Packages
+                </button>
+            </div>
+
+            <!-- Create Package Tab -->
+            <div id="createTab" class="tab-content active">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title">Create New Package</h2>
+                        <p class="admin-card-subtitle">Add a new package to the system and notify the receiver</p>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="alert success" id="createSuccess">
+                            <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                            <span id="createSuccessText">Package created successfully!</span>
+                        </div>
+                        
+                        <div class="alert error" id="createError">
+                            <i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>
+                            <span id="createErrorText">Error creating package.</span>
+                        </div>
+
+                        <form id="createPackageForm">
+                            <!-- Sender Information Section -->
+                            <div class="form-section">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-user"></i> Sender Information
+                                </h4>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="senderName" class="form-label">Sender Name *</label>
+                                        <input type="text" id="senderName" name="senderName" class="form-input" placeholder="Enter sender name" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="senderEmail" class="form-label">Sender Email</label>
+                                        <input type="email" id="senderEmail" name="senderEmail" class="form-input" placeholder="Enter sender email">
+                                    </div>
+
+                                    <div class="form-group form-group-full">
+                                        <label for="senderAddress" class="form-label">Sender Address *</label>
+                                        <textarea id="senderAddress" name="senderAddress" class="form-input" rows="2" placeholder="Enter complete sender address" required></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="senderPhone" class="form-label">Sender Phone *</label>
+                                        <input type="tel" id="senderPhone" name="senderPhone" class="form-input" placeholder="Enter sender phone number" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="origin" class="form-label">Country of Origin *</label>
+                                        <input type="text" id="origin" name="origin" class="form-input" placeholder="Enter country of origin" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Receiver Information Section -->
+                            <div class="form-section">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-user-check"></i> Receiver Information
+                                </h4>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="receiverName" class="form-label">Receiver Name *</label>
+                                        <input type="text" id="receiverName" name="receiverName" class="form-input" placeholder="Enter receiver name" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="receiverEmail" class="form-label">Receiver Email *</label>
+                                        <input type="email" id="receiverEmail" name="receiverEmail" class="form-input" placeholder="Enter receiver email" required>
+                                    </div>
+
+                                    <div class="form-group form-group-full">
+                                        <label for="receiverAddress" class="form-label">Receiver Address *</label>
+                                        <textarea id="receiverAddress" name="receiverAddress" class="form-input" rows="2" placeholder="Enter complete receiver address" required></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="receiverPhone" class="form-label">Receiver Phone *</label>
+                                        <input type="tel" id="receiverPhone" name="receiverPhone" class="form-input" placeholder="Enter receiver phone number" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="destination" class="form-label">Destination City/Country *</label>
+                                        <input type="text" id="destination" name="destination" class="form-input" placeholder="Enter destination city and country" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Package Details Section -->
+                            <div class="form-section">
+                                <h4 class="form-section-title">
+                                    <i class="fas fa-box"></i> Package Details
+                                </h4>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="packageDescription" class="form-label">Package Description *</label>
+                                        <input type="text" id="packageDescription" name="packageDescription" class="form-input" placeholder="Brief description of package contents" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="quantity" class="form-label">Quantity/Pieces *</label>
+                                        <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Number of pieces" min="1" value="1" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="weight" class="form-label">Weight</label>
+                                        <input type="text" id="weight" name="weight" class="form-input" placeholder="e.g., 2kg, 5lbs">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="totalCharges" class="form-label">Total Charges</label>
+                                        <input type="text" id="totalCharges" name="totalCharges" class="form-input" placeholder="e.g., $50, €45, Contact for pricing">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                Create Package & Send Notification
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manage Packages Tab -->
+            <div id="manageTab" class="tab-content">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2 class="admin-card-title">Manage Packages</h2>
+                        <p class="admin-card-subtitle">View and update package locations and status</p>
+                    </div>
+                    <div class="admin-card-body">
+                        <div class="alert success" id="updateSuccess">
+                            <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                            <span id="updateSuccessText">Package updated successfully!</span>
+                        </div>
+                        
+                        <div class="alert error" id="updateError">
+                            <i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>
+                            <span id="updateErrorText">Error updating package.</span>
+                        </div>
+
+                        <div class="packages-table-container">
+                            <table class="packages-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tracking ID</th>
+                                        <th>Receiver</th>
+                                        <th>Status</th>
+                                        <th>Location</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="packagesTableBody">
+                                    <!-- Packages will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Update Location Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Update Package Location</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="updateLocationForm">
+                    <input type="hidden" id="updatePackageId" name="packageId">
+                    
+                    <div class="form-group">
+                        <label for="updateTrackingId" class="form-label">Tracking ID</label>
+                        <input type="text" id="updateTrackingId" name="trackingId" class="form-input" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="updateStatus" class="form-label">New Status *</label>
+                        <select id="updateStatus" name="status" class="form-select" required>
+                            <option value="">Select status...</option>
+                            <option value="Package Created">Package Created</option>
+                            <option value="Processing">Processing</option>
+                            <option value="In Transit">In Transit</option>
+                            <option value="Arrived at Hub">Arrived at Hub</option>
+                            <option value="Out for Delivery">Out for Delivery</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="updateLocation" class="form-label">Current Location *</label>
+                        <input type="text" id="updateLocation" name="location" class="form-input" placeholder="e.g., Entebbe International Airport" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="updateNote" class="form-label">Status Note</label>
+                        <textarea id="updateNote" name="note" class="form-textarea" placeholder="Additional notes about this status update"></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update Location</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Package Timeline Modal -->
+    <div id="timelineModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Package Timeline</h3>
+                <button class="modal-close" onclick="closeTimelineModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div id="packageTimelineContent">
+                    <!-- Timeline will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

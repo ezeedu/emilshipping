@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emil Shipping - Global Freight Forwarding Solutions</title>
+    <meta name="description" content="Emil Shipping provides reliable freight forwarding and logistics solutions worldwide. Track your packages and manage shipments with ease.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="/" class="logo">
+                <i class="fas fa-plane"></i> Emil Shipping
+            </a>
+            
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link" data-translate="nav_home">Home</a></li>
+                <li><a href="/services" class="nav-link" data-translate="nav_services">Services</a></li>
+                <li><a href="/gallery" class="nav-link" data-translate="nav_gallery">Gallery</a></li>
+                <li><a href="#tracking" class="nav-link" data-translate="nav_track_package">Track Package</a></li>
+                <li><a href="/contact" class="nav-link" data-translate="nav_contact">Contact</a></li>
+                <li><a href="signin.html" class="nav-link" data-translate="nav_sign_in">Sign In</a></li>
+            </ul>
+            
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-carousel">
+                <!-- Slides will be dynamically generated -->
+            </div>
+            
+            <div class="hero-content">
+                <h1 class="hero-title" data-translate="global_freight_solutions">Global Freight Solutions</h1>
+                <p class="hero-subtitle" data-translate="reliable_fast_secure">Reliable, fast, and secure shipping services worldwide. Track your packages in real-time with Emil Shipping.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="#tracking" class="btn btn-primary" data-translate="track_package">Track Package</a>
+                    <a href="/services" class="btn btn-secondary" data-translate="our_services">Our Services</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Language Selection Section -->
+        <section class="language-section" style="background: var(--bg-light); padding: 1rem 0;">
+            <div class="container">
+                <div class="language-selector" style="display: flex; justify-content: center; align-items: center; gap: 1rem;">
+                    <i class="fas fa-globe" style="color: var(--primary-color); font-size: 1.2rem;"></i>
+                    <select id="languageSelect" class="language-dropdown" style="
+                        padding: 0.5rem 1rem;
+                        border: 2px solid var(--primary-color);
+                        border-radius: 25px;
+                        background: white;
+                        color: var(--text-dark);
+                        font-size: 1rem;
+                        cursor: pointer;
+                        outline: none;
+                        min-width: 150px;
+                    ">
+                        <option value="en" data-flag="🇺🇸">English</option>
+                        <option value="es" data-flag="🇪🇸">Español</option>
+                        <option value="fr" data-flag="🇫🇷">Français</option>
+                        <option value="de" data-flag="🇩🇪">Deutsch</option>
+                        <option value="it" data-flag="🇮🇹">Italiano</option>
+                        <option value="pt" data-flag="🇵🇹">Português</option>
+                        <option value="zh" data-flag="🇨🇳">中文</option>
+                        <option value="ja" data-flag="🇯🇵">日本語</option>
+                        <option value="ko" data-flag="🇰🇷">한국어</option>
+                        <option value="ar" data-flag="🇸🇦">العربية</option>
+                    </select>
+                    <span class="language-label" style="color: var(--text-light); font-size: 0.9rem;">Select Language</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Package Tracking Section -->
+        <section id="tracking" class="tracking-section">
+            <div class="container">
+                <h2 class="section-title" data-translate="track_package">Track Your Package</h2>
+                <div class="tracking-form">
+                    <form id="trackingForm">
+                        <div class="tracking-input-group">
+                            <input 
+                                type="text" 
+                                id="trackingId" 
+                                class="tracking-input" 
+                                placeholder="Enter your tracking ID (e.g., ESP-ABC123456789)"
+                                required
+                            >
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Track
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div id="trackingLoading" style="display: none; text-align: center; margin-top: 1rem;">
+                        <div class="loading"></div>
+                        <p>Searching for your package...</p>
+                    </div>
+                    
+                    <div id="trackingResults" style="display: none; margin-top: 2rem;">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title" data-translate="about_emil_shipping">About Emil Shipping</h2>
+                <div class="grid grid-2" style="align-items: center; gap: 3rem;">
+                    <div>
+                        <h3 data-translate="trusted_logistics_partner">Your Trusted Logistics Partner</h3>
+                        <p data-translate="about_description_1">With over two decades of experience in freight forwarding and logistics, Emil Shipping has established itself as a leader in global shipping solutions. We pride ourselves on delivering exceptional service, reliability, and innovation in every shipment.</p>
+                        
+                        <p data-translate="about_description_2">Our comprehensive network spans across continents, ensuring your cargo reaches its destination safely and on time. From small packages to large freight, we handle it all with the utmost care and professionalism.</p>
+                        
+                        <div style="margin-top: 2rem;">
+                            <div class="grid grid-3">
+                                <div style="text-align: center;">
+                                    <i class="fas fa-globe" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;"></i>
+                                    <h4 data-translate="global_network">Global Network</h4>
+                                    <p data-translate="worldwide_coverage">Worldwide coverage</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <i class="fas fa-clock" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;"></i>
+                                    <h4 data-translate="support_24_7">24/7 Support</h4>
+                                    <p data-translate="round_the_clock_service">Round-the-clock service</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;"></i>
+                                    <h4 data-translate="secure_shipping">Secure Shipping</h4>
+                                    <p data-translate="safe_and_reliable">Safe and reliable</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-section">
+                        <div class="video-container">
+                            <iframe 
+                                src="https://player.vimeo.com/video/512155956?h=8272103f6e&background=1&muted=1"
+                                allow="autoplay; fullscreen; picture-in-picture"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <p style="text-align: center; margin-top: 1rem; color: var(--text-light);" data-translate="video_description">
+                            Watch our company overview and see how we handle your shipments with care.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Preview -->
+        <section class="section" style="background: var(--bg-light);">
+            <div class="container">
+                <h2 class="section-title" data-translate="our_services">Our Services</h2>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-body" style="text-align: center;">
+                            <i class="fas fa-plane" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                            <h3 data-translate="air_freight">Air Freight</h3>
+                            <p data-translate="air_freight_description">Fast and reliable air cargo services for time-sensitive shipments worldwide.</p>
+                            <a href="/services#air-freight" class="btn btn-primary" data-translate="learn_more">Learn More</a>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body" style="text-align: center;">
+                            <i class="fas fa-ship" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                            <h3 data-translate="ocean_freight">Ocean Freight</h3>
+                            <p data-translate="ocean_freight_description">Cost-effective sea freight solutions for large volume shipments and containers.</p>
+                            <a href="/services#ocean-freight" class="btn btn-primary" data-translate="learn_more">Learn More</a>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body" style="text-align: center;">
+                            <i class="fas fa-truck" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                            <h3 data-translate="ground_transport">Ground Transport</h3>
+                            <p data-translate="ground_transport_description">Comprehensive land transportation services including trucking and rail freight.</p>
+                            <a href="/services#ground-transport" class="btn btn-primary" data-translate="learn_more">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="/services" class="btn btn-secondary" data-translate="our_services">View All Services</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title" data-translate="why_choose_us">Why Choose Emil Shipping?</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--primary-color); margin-right: 1rem;"></i>
+                                <h3 data-translate="real_time_tracking">Real-Time Tracking</h3>
+                            </div>
+                            <p data-translate="real_time_tracking_description">Monitor your shipments 24/7 with our advanced tracking system. Get instant updates on your package location and delivery status.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <i class="fas fa-users" style="font-size: 2rem; color: var(--primary-color); margin-right: 1rem;"></i>
+                                <h3 data-translate="expert_team">Expert Team</h3>
+                            </div>
+                            <p data-translate="expert_team_description">Our experienced logistics professionals ensure your cargo is handled with expertise and care from pickup to delivery.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <i class="fas fa-dollar-sign" style="font-size: 2rem; color: var(--primary-color); margin-right: 1rem;"></i>
+                                <h3 data-translate="competitive_rates">Competitive Rates</h3>
+                            </div>
+                            <p data-translate="competitive_rates_description">Get the best value for your shipping needs with our competitive pricing and transparent fee structure.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <i class="fas fa-headset" style="font-size: 2rem; color: var(--primary-color); margin-right: 1rem;"></i>
+                                <h3 data-translate="support_24_7_feature">24/7 Support</h3>
+                            </div>
+                            <p data-translate="support_24_7_description">Our customer support team is available around the clock to assist you with any questions or concerns.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section" style="background: var(--primary-color); color: var(--white);">
+            <div class="container" style="text-align: center;">
+                <h2 style="color: var(--white); margin-bottom: 1rem;" data-translate="ready_to_ship">Ready to Ship with Emil Shipping?</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem; color: rgba(255, 255, 255, 0.9);" data-translate="cta_description">
+                    Get started today and experience the difference of professional freight forwarding services.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="/contact" class="btn btn-accent" data-translate="get_quote">Get Quote</a>
+                    <a href="#tracking" class="btn btn-secondary" data-translate="track_package">Track Package</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-plane"></i> Emil Shipping</h3>
+                    <p data-translate="footer_description">Your trusted partner for global freight forwarding and logistics solutions. Delivering excellence since 2000.</p>
+                    <div style="margin-top: 1rem;">
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" style="font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 data-translate="footer_quick_links">Quick Links</h3>
+                    <p><a href="/" data-translate="nav_home">Home</a></p>
+                    <p><a href="/services" data-translate="nav_services">Services</a></p>
+                    <p><a href="/gallery" data-translate="nav_gallery">Gallery</a></p>
+                    <p><a href="#tracking" data-translate="nav_track_package">Track Package</a></p>
+                    <p><a href="/contact" data-translate="footer_contact_us">Contact Us</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 data-translate="footer_services">Services</h3>
+                    <p><a href="/services#air-freight" data-translate="air_freight">Air Freight</a></p>
+                    <p><a href="/services#ocean-freight" data-translate="ocean_freight">Ocean Freight</a></p>
+                    <p><a href="/services#ground-transport" data-translate="ground_transport">Ground Transport</a></p>
+                    <p><a href="/services#warehousing" data-translate="footer_warehousing">Warehousing</a></p>
+                    <p><a href="/services#customs" data-translate="footer_customs_clearance">Customs Clearance</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 data-translate="footer_contact_info">Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> <span data-translate="footer_address">123 Shipping Lane, Port City, PC 12345</span></p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@emilshipping.com</p>
+                    <p><i class="fas fa-clock"></i> <span data-translate="footer_support_hours">24/7 Customer Support</span></p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p data-translate="footer_copyright">&copy; 2024 Emil Shipping. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/main.js"></script>
+</body>
+</html>

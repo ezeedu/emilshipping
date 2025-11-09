@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Emil Shipping</title>
+    <meta name="description" content="Sign in to your Emil Shipping account to access admin dashboard and manage shipments.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+    
+    <style>
+        .signin-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 2rem 1rem;
+        }
+        
+        .signin-card {
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .signin-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .signin-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .signin-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .signin-subtitle {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+        
+        .form-input-container {
+            position: relative;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .forgot-password:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .signin-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .signin-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .signin-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+            font-size: 0.9rem;
+            border: 1px solid #fecaca;
+        }
+        
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+            font-size: 0.9rem;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .signin-footer {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .signin-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .signin-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-to-site {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-site:hover {
+            color: rgba(255, 255, 255, 0.8);
+            transform: translateX(-5px);
+        }
+        
+        .security-notice {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            border: 1px solid #fde68a;
+        }
+        
+        .security-notice i {
+            margin-right: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .signin-container {
+                padding: 1rem;
+            }
+            
+            .signin-card {
+                padding: 2rem;
+            }
+            
+            .back-to-site {
+                position: static;
+                margin-bottom: 2rem;
+                color: var(--primary-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signin-container">
+        <a href="/" class="back-to-site">
+            <i class="fas fa-arrow-left"></i>
+            Back to Website
+        </a>
+        
+        <div class="signin-card">
+            <div class="signin-header">
+                <div class="signin-logo">
+                    <i class="fas fa-plane"></i>
+                    Emil Shipping
+                </div>
+                <h1 class="signin-title">Welcome Back</h1>
+                <p class="signin-subtitle">Sign in to access your admin dashboard</p>
+            </div>
+            
+            <div class="security-notice">
+                <i class="fas fa-shield-alt"></i>
+                This is a secure admin area. Only authorized personnel should access this page.
+            </div>
+            
+            <form id="signinForm">
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                    <span id="successText">Sign in successful! Redirecting...</span>
+                </div>
+                
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>
+                    <span id="errorText">Invalid email or password. Please try again.</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="form-input-container">
+                        <i class="fas fa-envelope form-input-icon"></i>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="Enter your email address"
+                            required
+                            autocomplete="email"
+                        >
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="form-input-container">
+                        <i class="fas fa-lock form-input-icon"></i>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input" 
+                            placeholder="Enter your password"
+                            required
+                            autocomplete="current-password"
+                        >
+                        <i class="fas fa-eye password-toggle" id="passwordToggle"></i>
+                    </div>
+                </div>
+                
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="signin-btn" id="signinBtn">
+                    <span class="loading-spinner" id="loadingSpinner"></span>
+                    <i class="fas fa-sign-in-alt" id="signinIcon"></i>
+                    <span id="signinText">Sign In</span>
+                </button>
+            </form>
+            
+            <div class="signin-footer">
+
+                <p>Need help? Contact <a href="/contact">customer support</a></p>
+                <p style="margin-top: 0.5rem;">
+                    <a href="/">Return to main website</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase CDN -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts -->
+    <script>
+        let supabaseClient = null;
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const signinForm = document.getElementById('signinForm');
+            const signinBtn = document.getElementById('signinBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const signinIcon = document.getElementById('signinIcon');
+            const signinText = document.getElementById('signinText');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const errorText = document.getElementById('errorText');
+            const passwordToggle = document.getElementById('passwordToggle');
+            const passwordInput = document.getElementById('password');
+            const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+            const signupLink = document.getElementById('signupLink');
+
+            // Initialize Supabase with better error handling
+            try {
+                // Check if Supabase CDN loaded
+                if (!window.supabase || !window.supabase.createClient) {
+                    throw new Error('Supabase CDN failed to load. Please check your internet connection.');
+                }
+
+                // Fetch configuration with timeout
+                const configController = new AbortController();
+                const configTimeout = setTimeout(() => configController.abort(), 10000); // 10 second timeout
+                
+                const configResponse = await fetch('/api/config', {
+                    signal: configController.signal,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                clearTimeout(configTimeout);
+                
+                if (!configResponse.ok) {
+                    throw new Error(`Configuration fetch failed: ${configResponse.status} ${configResponse.statusText}`);
+                }
+                
+                const config = await configResponse.json();
+                
+                if (!config.supabaseUrl || !config.supabaseAnonKey) {
+                    throw new Error('Invalid Supabase configuration received');
+                }
+                
+                console.log('Supabase config loaded:', {
+                    url: config.supabaseUrl,
+                    keyLength: config.supabaseAnonKey ? config.supabaseAnonKey.length : 0,
+                    keyPrefix: config.supabaseAnonKey ? config.supabaseAnonKey.substring(0, 20) + '...' : 'missing'
+                });
+                
+                // Create Supabase client
+                supabaseClient = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+                console.log('Supabase client initialized successfully');
+                
+                // Test the connection with timeout
+                const sessionController = new AbortController();
+                const sessionTimeout = setTimeout(() => sessionController.abort(), 5000); // 5 second timeout
+                
+                try {
+                    const { data, error } = await supabaseClient.auth.getSession();
+                    clearTimeout(sessionTimeout);
+                    console.log('Initial session check:', { data, error });
+                    
+                    // If there's already a session, redirect to admin
+                    if (data.session) {
+                        console.log('User already authenticated, redirecting to admin...');
+                        window.location.href = '/admin';
+                        return;
+                    }
+                } catch (sessionError) {
+                    clearTimeout(sessionTimeout);
+                    console.warn('Session check failed:', sessionError);
+                    // Continue anyway - session check is not critical for sign-in
+                }
+                
+            } catch (error) {
+                console.error('Failed to initialize Supabase:', error);
+                
+                // Provide specific error messages
+                if (error.name === 'AbortError') {
+                    showError('Connection timeout. Please check your internet connection and try again.');
+                } else if (error.message.includes('CDN')) {
+                    showError('Authentication service failed to load. Please refresh the page and try again.');
+                } else if (error.message.includes('fetch')) {
+                    showError('Unable to connect to authentication service. Please check your internet connection.');
+                } else {
+                    showError(`Authentication service error: ${error.message}`);
+                }
+                return;
+            }
+
+            // Password visibility toggle
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                if (type === 'password') {
+                    passwordToggle.classList.remove('fa-eye-slash');
+                    passwordToggle.classList.add('fa-eye');
+                } else {
+                    passwordToggle.classList.remove('fa-eye');
+                    passwordToggle.classList.add('fa-eye-slash');
+                }
+            });
+
+            // Form submission
+            signinForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('rememberMe').checked;
+
+                // Basic validation
+                if (!email || !password) {
+                    showError('Please fill in all fields.');
+                    return;
+                }
+
+                // Email format validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showError('Please enter a valid email address.');
+                    return;
+                }
+
+                // Show loading state
+                setLoadingState(true);
+                hideMessages();
+
+                try {
+                    if (!supabaseClient) {
+                        throw new Error('Authentication service not available. Please refresh the page and try again.');
+                    }
+
+                    // Create abort controller for timeout
+                    const authController = new AbortController();
+                    const authTimeout = setTimeout(() => authController.abort(), 15000); // 15 second timeout
+
+                    // Actual Supabase authentication with timeout handling
+                    let authResult;
+                    try {
+                        authResult = await Promise.race([
+                            supabaseClient.auth.signInWithPassword({
+                                email: email,
+                                password: password
+                            }),
+                            new Promise((_, reject) => {
+                                authController.signal.addEventListener('abort', () => {
+                                    reject(new Error('Authentication request timed out'));
+                                });
+                            })
+                        ]);
+                        clearTimeout(authTimeout);
+                    } catch (timeoutError) {
+                        clearTimeout(authTimeout);
+                        throw timeoutError;
+                    }
+
+                    const { data, error } = authResult;
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    if (data.user) {
+                        showSuccess('Sign in successful! Redirecting to dashboard...');
+                        
+                        // Redirect to admin dashboard after delay
+                        setTimeout(() => {
+                            window.location.href = '/admin';
+                        }, 2000);
+                    } else {
+                        showError('Invalid email or password. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Sign in error:', error);
+                    console.error('Error details:', {
+                        message: error.message,
+                        status: error.status,
+                        statusText: error.statusText,
+                        name: error.name,
+                        stack: error.stack
+                    });
+                    
+                    // Handle specific error types
+                    if (error.message.includes('timed out') || error.name === 'AbortError') {
+                        showError('Sign-in request timed out. Please check your internet connection and try again.');
+                    } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                        showError('Network connection failed. Please check your internet connection and try again.');
+                    } else if (error.message.includes('Invalid login credentials')) {
+                        showError('Invalid email or password. Please try again.');
+                    } else if (error.message.includes('Email not confirmed')) {
+                        showError('Please check your email and confirm your account before signing in.');
+                    } else if (error.message.includes('Too many requests')) {
+                        showError('Too many sign-in attempts. Please wait a moment and try again.');
+                    } else if (error.message.includes('Network')) {
+                        showError('Network error. Please check your connection and try again.');
+                    } else {
+                        showError(`Authentication error: ${error.message || 'Please try again.'}`);
+                    }
+                } finally {
+                    setLoadingState(false);
+                }
+            });
+
+            // Forgot password handler
+            forgotPasswordLink.addEventListener('click', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value.trim();
+                if (!email) {
+                    showError('Please enter your email address first, then click "Forgot password?"');
+                    document.getElementById('email').focus();
+                    return;
+                }
+
+                if (!supabaseClient) {
+                    showError('Authentication service unavailable. Please try again later.');
+                    return;
+                }
+
+                try {
+                    const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+                    if (error) {
+                        throw error;
+                    }
+                    showSuccess('Password reset instructions have been sent to your email.');
+                } catch (error) {
+                    console.error('Password reset error:', error);
+                    showError('Failed to send password reset email. Please try again.');
+                }
+            });
+
+            // Signup link now redirects to dedicated signup page
+
+            function setLoadingState(loading) {
+                if (loading) {
+                    loadingSpinner.style.display = 'block';
+                    signinIcon.style.display = 'none';
+                    signinText.textContent = 'Signing In...';
+                    signinBtn.disabled = true;
+                } else {
+                    loadingSpinner.style.display = 'none';
+                    signinIcon.style.display = 'block';
+                    signinText.textContent = 'Sign In';
+                    signinBtn.disabled = false;
+                }
+            }
+
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+            }
+
+            function showSuccess(message) {
+                document.getElementById('successText').textContent = message;
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            }
+
+            function hideMessages() {
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+            }
+
+            // Auto-focus email input
+            document.getElementById('email').focus();
+
+            // Check if already authenticated with Supabase
+            if (supabaseClient) {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session) {
+                    showSuccess('You are already signed in. Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = '/admin';
+                    }, 1500);
+                }
+            }
+
+            // Handle Enter key in password field
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    signinForm.dispatchEvent(new Event('submit'));
+                }
+            });
+        });
+    </script>
+</body>
+</html>

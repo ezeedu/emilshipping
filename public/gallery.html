@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Emil Shipping</title>
+    <meta name="description" content="Explore our gallery showcasing Emil Shipping's operations, facilities, and global freight forwarding services.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+    
+    <style>
+        .gallery-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        
+        .gallery-modal-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .gallery-modal img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+        }
+        
+        .gallery-close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .gallery-close:hover {
+            color: #bbb;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 0.25rem;
+        }
+        
+        .gallery-prev {
+            left: 20px;
+        }
+        
+        .gallery-next {
+            right: 20px;
+        }
+        
+        .gallery-nav:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .gallery-caption {
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            font-size: 16px;
+        }
+        
+        .gallery-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--primary-color);
+            background: transparent;
+            color: var(--primary-color);
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .gallery-item {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="/" class="logo">
+                <i class="fas fa-plane"></i> Emil Shipping
+            </a>
+            
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/services" class="nav-link">Services</a></li>
+                <li><a href="/gallery" class="nav-link">Gallery</a></li>
+                <li><a href="/#tracking" class="nav-link">Track Package</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="signin.html" class="nav-link">Sign In</a></li>
+            </ul>
+            
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main style="margin-top: 80px;">
+        <!-- Hero Section -->
+        <section class="section" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white); text-align: center;">
+            <div class="container">
+                <h1 style="color: var(--white); font-size: 3rem; margin-bottom: 1rem;">Our Gallery</h1>
+                <p style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto;">
+                    Take a look at our operations, facilities, and the global reach of Emil Shipping's freight forwarding services.
+                </p>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="section">
+            <div class="container">
+                <!-- Filter Buttons -->
+                <div class="gallery-filter">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="air-freight">Air Freight</button>
+                    <button class="filter-btn" data-filter="ocean-freight">Ocean Freight</button>
+                    <button class="filter-btn" data-filter="ground-transport">Ground Transport</button>
+                    <button class="filter-btn" data-filter="warehousing">Warehousing</button>
+                    <button class="filter-btn" data-filter="operations">Operations</button>
+                </div>
+
+                <!-- Gallery Grid -->
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Air Freight Images -->
+                    <div class="gallery-item" data-category="air-freight" data-caption="Cargo aircraft loading operations at international airport">
+                        <img src="https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Air Freight Operations">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="air-freight" data-caption="Express air cargo delivery service">
+                        <img src="https://images.pexels.com/photos/2226458/pexels-photo-2226458.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Air Cargo Plane">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="air-freight" data-caption="Air freight terminal with cargo handling equipment">
+                        <img src="https://images.pexels.com/photos/723240/pexels-photo-723240.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Air Freight Terminal">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="air-freight" data-caption="International cargo aircraft fleet">
+                        <img src="https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Cargo Aircraft Fleet">
+                    </div>
+
+                    <!-- Ocean Freight Images -->
+                    <div class="gallery-item" data-category="ocean-freight" data-caption="Container ship at international port">
+                        <img src="https://images.pexels.com/photos/906494/pexels-photo-906494.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Container Ship">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="ocean-freight" data-caption="Port operations with container cranes">
+                        <img src="https://images.pexels.com/photos/1117210/pexels-photo-1117210.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Port Operations">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="ocean-freight" data-caption="Shipping containers ready for ocean transport">
+                        <img src="https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Shipping Containers">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="ocean-freight" data-caption="Container loading operations at seaport">
+                        <img src="https://images.pexels.com/photos/2226458/pexels-photo-2226458.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Container Loading">
+                    </div>
+
+                    <!-- Ground Transport Images -->
+                    <div class="gallery-item" data-category="ground-transport" data-caption="Long-haul trucking for cargo delivery">
+                        <img src="https://images.pexels.com/photos/1118448/pexels-photo-1118448.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Trucking Fleet">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="ground-transport" data-caption="Rail freight transportation">
+                        <img src="https://images.pexels.com/photos/723240/pexels-photo-723240.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Rail Transport">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="ground-transport" data-caption="Highway logistics and cargo transport">
+                        <img src="https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Highway Transport">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="ground-transport" data-caption="Distribution center operations">
+                        <img src="https://images.pexels.com/photos/906494/pexels-photo-906494.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Distribution Center">
+                    </div>
+
+                    <!-- Warehousing Images -->
+                    <div class="gallery-item" data-category="warehousing" data-caption="Modern warehouse facility with storage systems">
+                        <img src="https://images.pexels.com/photos/1117210/pexels-photo-1117210.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Warehouse Facility">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="warehousing" data-caption="Inventory management and storage solutions">
+                        <img src="https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Inventory Management">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="warehousing" data-caption="Warehouse operations and logistics">
+                        <img src="https://images.pexels.com/photos/2226458/pexels-photo-2226458.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Warehouse Operations">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="warehousing" data-caption="High-capacity storage and distribution">
+                        <img src="https://images.pexels.com/photos/723240/pexels-photo-723240.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Storage Hub">
+                    </div>
+
+                    <!-- Operations Images -->
+                    <div class="gallery-item" data-category="operations" data-caption="Operations control center monitoring">
+                        <img src="https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Control Center">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="operations" data-caption="Real-time tracking and coordination">
+                        <img src="https://images.pexels.com/photos/906494/pexels-photo-906494.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Tracking Systems">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="operations" data-caption="Quality control and inspection">
+                        <img src="https://images.pexels.com/photos/1117210/pexels-photo-1117210.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Quality Control">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="operations" data-caption="Customer service operations">
+                        <img src="https://images.pexels.com/photos/1118448/pexels-photo-1118448.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Customer Service">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="operations" data-caption="Global network coordination">
+                        <img src="https://picsum.photos/600/400?random=28" alt="Global Network">
+                    </div>
+                    
+                    <div class="gallery-item" data-category="operations" data-caption="Team collaboration and planning">
+                        <img src="https://picsum.photos/600/400?random=29" alt="Team Collaboration">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Company Stats -->
+        <section class="section" style="background: var(--bg-light);">
+            <div class="container">
+                <h2 class="section-title">Emil Shipping by the Numbers</h2>
+                <div class="grid grid-4">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0.5rem;">200+</div>
+                        <h4>Countries Served</h4>
+                        <p>Global network coverage</p>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0.5rem;">50K+</div>
+                        <h4>Shipments Monthly</h4>
+                        <p>Packages delivered worldwide</p>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0.5rem;">24/7</div>
+                        <h4>Customer Support</h4>
+                        <p>Round-the-clock service</p>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0.5rem;">99.8%</div>
+                        <h4>On-Time Delivery</h4>
+                        <p>Reliable service record</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section" style="background: var(--primary-color); color: var(--white); text-align: center;">
+            <div class="container">
+                <h2 style="color: var(--white); margin-bottom: 1rem;">Experience Emil Shipping</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
+                    Ready to see what we can do for your shipping needs? Get in touch with our team today.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="/contact" class="btn btn-accent">Contact Us</a>
+                    <a href="/services" class="btn btn-secondary">Our Services</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Gallery Modal -->
+    <div id="galleryModal" class="gallery-modal">
+        <div class="gallery-modal-content">
+            <span class="gallery-close">&times;</span>
+            <button class="gallery-nav gallery-prev">&#10094;</button>
+            <button class="gallery-nav gallery-next">&#10095;</button>
+            <img id="modalImage" src="" alt="">
+            <div class="gallery-caption" id="modalCaption"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-plane"></i> Emil Shipping</h3>
+                    <p>Your trusted partner for global freight forwarding and logistics solutions. Delivering excellence since 2000.</p>
+                    <div style="margin-top: 1rem;">
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" style="font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="/">Home</a></p>
+                    <p><a href="/services">Services</a></p>
+                    <p><a href="/gallery">Gallery</a></p>
+                    <p><a href="/#tracking">Track Package</a></p>
+                    <p><a href="/contact">Contact Us</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <p><a href="/services#air-freight">Air Freight</a></p>
+                    <p><a href="/services#ocean-freight">Ocean Freight</a></p>
+                    <p><a href="/services#ground-transport">Ground Transport</a></p>
+                    <p><a href="/services#warehousing">Warehousing</a></p>
+                    <p><a href="/services#customs">Customs Clearance</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Shipping Lane, Port City, PC 12345</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@emilshipping.com</p>
+                    <p><i class="fas fa-clock"></i> 24/7 Customer Support</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Emil Shipping. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/main.js"></script>
+    <script>
+        // Gallery functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const modal = document.getElementById('galleryModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalCaption = document.getElementById('modalCaption');
+            const closeBtn = document.querySelector('.gallery-close');
+            const prevBtn = document.querySelector('.gallery-prev');
+            const nextBtn = document.querySelector('.gallery-next');
+            
+            let currentImageIndex = 0;
+            let visibleImages = [];
+
+            // Filter functionality
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    
+                    // Update active button
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter images
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                    
+                    updateVisibleImages();
+                });
+            });
+
+            // Update visible images array
+            function updateVisibleImages() {
+                visibleImages = Array.from(galleryItems).filter(item => 
+                    item.style.display !== 'none'
+                );
+            }
+
+            // Initialize visible images
+            updateVisibleImages();
+
+            // Modal functionality
+            galleryItems.forEach((item, index) => {
+                item.addEventListener('click', function() {
+                    const img = this.querySelector('img');
+                    const caption = this.getAttribute('data-caption');
+                    
+                    modalImage.src = img.src.replace('w=600', 'w=1200');
+                    modalCaption.textContent = caption;
+                    modal.style.display = 'block';
+                    
+                    currentImageIndex = visibleImages.indexOf(this);
+                });
+            });
+
+            // Close modal
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Navigation
+            prevBtn.addEventListener('click', function() {
+                currentImageIndex = (currentImageIndex - 1 + visibleImages.length) % visibleImages.length;
+                showImage(currentImageIndex);
+            });
+
+            nextBtn.addEventListener('click', function() {
+                currentImageIndex = (currentImageIndex + 1) % visibleImages.length;
+                showImage(currentImageIndex);
+            });
+
+            function showImage(index) {
+                const item = visibleImages[index];
+                const img = item.querySelector('img');
+                const caption = item.getAttribute('data-caption');
+                
+                modalImage.src = img.src.replace('w=600', 'w=1200');
+                modalCaption.textContent = caption;
+            }
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (modal.style.display === 'block') {
+                    if (e.key === 'Escape') {
+                        modal.style.display = 'none';
+                    } else if (e.key === 'ArrowLeft') {
+                        prevBtn.click();
+                    } else if (e.key === 'ArrowRight') {
+                        nextBtn.click();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
